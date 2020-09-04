@@ -19,5 +19,4 @@ AUDIO_ENABLE = no           # Audio output
 CUSTOM_MATRIX = yes
 STENO_ENABLE = yes
 LTO_ENABLE = yes
-
 SRC += matrix.c i2c_master.c

@@ -1,0 +1,8 @@
+BOOTLOADER = atmel-dfu
+BOOTMAGIC_ENABLE = yes
+NKRO_ENABLE = no
+MOUSEKEY_ENABLE = no
+LTO_ENABLE = yes
+USER_NAME := dnaq
+COMBO_ENABLE = yes
+DEBOUNCE_TYPE = sym_defer_pk

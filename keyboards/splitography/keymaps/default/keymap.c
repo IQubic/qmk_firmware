@@ -1,4 +1,4 @@
-/* Copyright 2021 Alexis Jeandeau
+/* Copyright 2017 REPLACE_WITH_YOUR_NAME
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,278 +14,333 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include QMK_KEYBOARD_H
+// This is the canonical layout file for the Quantum project. If you want to add another keyboard,
+// this is the style you want to emulate.
+//
+// To flash steno firmware
+// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+//   Reset keyboard or press hw reset button on base (hole)
+//
+//   cd qmk_firmware/keyboards/steno
+//   sudo make KEYMAP=sdothum dfu
+//
+//   sudo make clean          (good practice before flashing)
+//   sudo make KEYMAP=<...>   (to compile check)
+//
+// Package requirements (for arch linux)
+// ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+//   avr-gcc-atmel
+//   avr-libc-atmel
+//   dfu-programmer
+//
+// Code
+// ▔▔▔▔
+//   This source is shamelessly based on the "default" steno layout
+//
+//   #ifdef/#endif block structures are not indented, as syntax highlighting
+//   in vim is sufficient for identification
+//
+//   c++ commenting style is used throughout
+
+#include "config.h"
+#include "splitography.h"
+#include "action_layer.h"
 #include "keymap_steno.h"
+#include "eeconfig.h"
 
-enum keyboard_layers {
-    _QWERTY = 0,
-    _GEMINI,
-    _PLOVER,
-    _BLUE,
-    _ORANGE,
-    _GREEN,
-    _NUM,
-    _END_LAYERS,
+extern keymap_config_t keymap_config;
+
+enum splitography_layers {
+  _QWERTY = 0
+ ,_TXBOLT
+ ,_PLOVER
+ ,_BLUE
+ ,_ORANGE
+ ,_GREEN
+ ,_NUM
+ ,_END_LAYERS
 };
 
-enum keyboard_keycodes {
-    QWERTY = SAFE_RANGE,
-    QWERTY1,
-    QWERTY2,
-    GEMINI,
-    PLOVER,
-    BLUE,
-    ORANGE,
+enum splitography_keycodes {
+  QWERTY = SAFE_RANGE
+ ,QWERTY1
+ ,QWERTY2
+ ,TXBOLT
+ ,PLOVER
+ ,BLUE
+ ,ORANGE
 };
 
-#define COPY LCTL(KC_C)
-#define CUT LCTL(KC_X)
-#define PASTE LCTL(KC_V)
-#define UNDO LCTL(KC_Z)
-#define TG_NUM TG(_NUM)
+// keycodes
+#define ___x___ KC_TRNS
+#ifdef _______
+#undef _______
+#endif
+#define _______ KC_NO
 
-// clang-format off
+#define ST_BOLT QK_STENO_BOLT
+
+#define COPY    LCTL(KC_C)
+#define CUT     LCTL(KC_X)
+#define PASTE   LCTL(KC_V)
+#define UNDO    LCTL(KC_Z)
+#define TG_NUM  TG(_NUM)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    // ...................................................................... Qwerty
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/1b04ce6be0cee6e5d2998b2a8efb8b09
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │  Esc │   Q  │   W  │   E  │   R  │   T  │   Y  │   U  │   I  │   O  │   P  │ Bksp │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │  Alt │   A  │   S  │   D  │   F  │   G  │   H  │   J  │   K  │   L  │   ;  │ Enter│
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │ Shift│   Z  │   X  │   C  │   V  │   B  │   N  │   M  │   ,  │   .  │   /  │  GUI │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │Orange│ Blue │ Space│ Ctrl │
-    //                             └──────┴──────┴──────┴──────┘
+// ...................................................................... Qwerty
+//
+// http://www.keyboard-layout-editor.com/#/gists/1b04ce6be0cee6e5d2998b2a8efb8b09
 
-    [_QWERTY] = LAYOUT(
-        KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
-        KC_LALT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT ,
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_LGUI,
-                                            ORANGE,  BLUE,    KC_SPC,  KC_LCTL
-    ),
+  // ,-----------------------------------------------------------------------------------.
+  // |  Esc |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+  // -------|------+------+------+------+------+------+------+------+------+-------------|
+  // |  Alt |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  | Enter|
+  // -------|------+------+------+------+------+------+------+------+------+-------------|
+  // | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |  GUI |
+  // |------+------+------+------+------+------+------+------+------+------+------+------|
+  // |                           |Orange| Blue | Space| Ctrl |                           |
+  // `-----------------------------------------------------------------------------------'
 
-    // .................................................................. Blue Layer
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/054b8bc0e31971bb962ea1c781232e0b
+  [_QWERTY] = {
+    {KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC},
+    {KC_LALT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT },
+    {KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_LGUI},
+    {_______, _______, _______, _______, ORANGE,  BLUE,    KC_SPC,  KC_LCTL, _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │   `  │   1  │   2  │   3  │   4  │   5  │   6  │   7  │   8  │   9  │   0  │      │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │  Alt │ Stop │ Prev │ Play │ Next │ +Vol │      │      │      │   [  │   ]  │   '  │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │ Shift│ Undo │  Cut │ Copy │ Paste│ -Vol │ Mute │      │      │   -  │   =  │  GUI │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │Orange│  f() │  Del │ Ctrl │
-    //                             └──────┴──────┴──────┴──────┘
+// .................................................................. Blue Layer
+//_______,
+// http://www.keyboard-layout-editor.com/#/gists/054b8bc0e31971bb962ea1c781232e0b
 
-    [_BLUE] = LAYOUT(
-        KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    XXXXXXX,
-        KC_LALT, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX, KC_LBRC, KC_RBRC, KC_QUOT,
-        KC_LSFT, UNDO,    CUT,     COPY,    PASTE,   KC_VOLD, KC_MUTE, XXXXXXX, XXXXXXX, KC_MINS, KC_EQL,  KC_LGUI,
-                                            ORANGE,  _______, KC_DEL,  KC_LCTL
-    ),
+  // .-----------------------------------------------------------------------------------.
+  // |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
+  // |-----------------------------------------------------------------------------------|
+  // |  Alt | Stop | Prev | Play | Next | +Vol |      |      |      |   [  |   ]  |   '  |
+  // |-----------------------------------------------------------------------------------|
+  // | Shift| Undo |  Cut | Copy | Paste| -Vol | Mute |      |      |   -  |   =  |  GUI |
+  // |-----------------------------------------------------------------------------------|
+  // |                           |Orange|  f() |  Del | Ctrl |                           |
+  // '-----------------------------------------------------------------------------------'
 
-    // ................................................................ Orange Layer
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/83ccc7c3faa78b1f67f6fef65063a248
+  [_BLUE] = {
+    {KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______},
+    {KC_LALT, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLU, _______, _______, _______, KC_LBRC, KC_RBRC, KC_QUOT},
+    {KC_LSFT, UNDO,    CUT,     COPY,    PASTE,   KC_VOLD, KC_MUTE, _______, _______, KC_MINS, KC_EQL,  KC_LGUI},
+    {_______, _______, _______, _______, ORANGE,  ___x___, KC_DEL,  KC_LCTL, _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │Plover│  F1  │  F2  │  F3  │  F4  │      │  App │ PrScr│ScrLck│ Pause│      │      │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │  Alt │  F5  │  F6  │  F7  │  F8  │      │      │Insert│ Home │ PgUp │      │      │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │ Shift│  F9  │  F10 │  F11 │  F12 │      │      │  Del │  End │ PgDn │   \  │  GUI │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │  f() │ Blue │  Tab │ Ctrl │
-    //                             └──────┴──────┴──────┴──────┘
+// ................................................................ Orange Layer
+//
+// http://www.keyboard-layout-editor.com/#/gists/83ccc7c3faa78b1f67f6fef65063a248
 
-    [_ORANGE] = LAYOUT(
-        PLOVER,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   XXXXXXX, KC_APP,  KC_PSCR, KC_SLCK, KC_PAUS, XXXXXXX, XXXXXXX,
-        KC_LALT, KC_F5,   KC_F6,   KC_F7,   KC_F8,   XXXXXXX, XXXXXXX, KC_INS,  KC_HOME, KC_PGUP, XXXXXXX, XXXXXXX,
-        KC_LSFT, KC_F9,   KC_F10,  KC_F11,  KC_F12,  XXXXXXX, XXXXXXX, KC_DEL,  KC_END,  KC_PGDN, KC_BSLS, KC_LGUI,
-                                            _______, BLUE,    KC_TAB,  KC_LCTL
-    ),
+  // .-----------------------------------------------------------------------------------.
+  // |Plover|  F1  |  F2  |  F3  |  F4  |      |  App | PrScr|ScrLck| Pause|      |      |
+  // |-----------------------------------------------------------------------------------|
+  // |  Alt |  F5  |  F6  |  F7  |  F8  |      |      |Insert| Home | PgUp |      |      |
+  // |-----------------------------------------------------------------------------------|
+  // | Shift|  F9  |  F10 |  F11 |  F12 |      |      |  Del |  End | PgDn |   \  |  GUI |
+  // |-----------------------------------------------------------------------------------|
+  // |                           |  f() | Blue |  Tab | Ctrl |                           |
+  // '-----------------------------------------------------------------------------------'
 
-    // ................................................................. Green Layer
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/bc7902f1eada4d7d34d3445aa1eccdab
+  [_ORANGE] = {
+    {PLOVER,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   _______, KC_APP,  KC_PSCR, KC_SLCK, KC_PAUS, _______, _______},
+    {KC_LALT, KC_F5,   KC_F6,   KC_F7,   KC_F8,   _______, _______, KC_INS,  KC_HOME, KC_PGUP, _______, _______},
+    {KC_LSFT, KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, KC_DEL,  KC_END,  KC_PGDN, KC_BSLS, KC_LGUI},
+    {_______, _______, _______, _______, ___x___, BLUE,    KC_TAB,  KC_LCTL, _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │Gemini│      │      │      │      │Scroll│   /  │   7  │   8  │   9  │   -  │      │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │  Alt │ Home │  Up  │  End │ PgUp │ Caps │   *  │   4  │   5  │   6  │   +  │ Enter│
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │ Shift│ Left │ Down │ Right│ PgDn │  Num │   0  │   1  │   2  │   3  │      │  GUI │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │  f() │  f() │  --  │ Ctrl │
-    //                             └──────┴──────┴──────┴──────┘
+// ................................................................. Green Layer
+//
+// http://www.keyboard-layout-editor.com/#/gists/bc7902f1eada4d7d34d3445aa1eccdab
 
-    [_GREEN] = LAYOUT(
-        GEMINI,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_SLCK, KC_PSLS, KC_P7,   KC_P8,   KC_P9,   KC_MINS, XXXXXXX,
-        KC_LALT, KC_HOME, KC_UP,   KC_END,  KC_PGUP, KC_CAPS, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_ENT ,
-        KC_LSFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, TG_NUM,  KC_P0,   KC_P1,   KC_P2,   KC_P3,   XXXXXXX, KC_LGUI,
-                                            _______, _______, XXXXXXX, KC_LCTL
-    ),
+  // .-----------------------------------------------------------------------------------.
+  // |TxBolt|      |      |      |      |Scroll|   /  |   7  |   8  |   9  |   -  |      |
+  // |-----------------------------------------------------------------------------------|
+  // |  Alt | Home |  Up  |  End | PgUp | Caps |   *  |   4  |   5  |   6  |   +  | Enter|
+  // |-----------------------------------------------------------------------------------|
+  // | Shift| Left | Down | Right| PgDn |  Num |   0  |   1  |   2  |   3  |      |  GUI |
+  // |-----------------------------------------------------------------------------------|
+  // |                           |  f() |  f() |  --  | Ctrl |                           |
+  // '-----------------------------------------------------------------------------------'
 
-    // ................................................................... Num Layer
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/bc7902f1eada4d7d34d3445aa1eccdab
+  [_GREEN] = {
+    {TXBOLT,  _______, _______, _______, _______, KC_SLCK, KC_PSLS, KC_P7,   KC_P8,   KC_P9,   KC_MINS, _______},
+    {KC_LALT, KC_HOME, KC_UP,   KC_END,  KC_PGUP, KC_CAPS, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_ENT },
+    {KC_LSFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, TG_NUM,  KC_P0,   KC_P1,   KC_P2,   KC_P3,   _______, KC_LGUI},
+    {_______, _______, _______, _______, ___x___, ___x___, _______, KC_LCTL, _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │      │      │      │      │      │      │   /  │   7  │   8  │   9  │   -  │      │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │  Alt │ Home │  Up  │  End │ PgUp │      │   *  │   4  │   5  │   6  │   +  │ Enter│
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │ Shift│ Left │ Down │ Right│ PgDn │  f() │   0  │   1  │   2  │   3  │      │  GUI │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │  --  │  --  │  --  │ Ctrl │
-    //                             └──────┴──────┴──────┴──────┘
+// ................................................................... Num Layer
+//
+// http://www.keyboard-layout-editor.com/#/gists/bc7902f1eada4d7d34d3445aa1eccdab
 
-    [_NUM] = LAYOUT(
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PSLS, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, XXXXXXX,
-        KC_LALT, KC_HOME, KC_UP,   KC_END,  KC_PGUP, XXXXXXX, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_ENT ,
-        KC_LSFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, QWERTY,  KC_P0,   KC_P1,   KC_P2,   KC_P3,   XXXXXXX, KC_LGUI,
-                                            XXXXXXX, XXXXXXX, XXXXXXX, KC_LCTL
-    ),
+  // .-----------------------------------------------------------------------------------.
+  // |      |      |      |      |      |      |   /  |   7  |   8  |   9  |   -  |      |
+  // |-----------------------------------------------------------------------------------|
+  // |  Alt | Home |  Up  |  End | PgUp |      |   *  |   4  |   5  |   6  |   +  | Enter|
+  // |-----------------------------------------------------------------------------------|
+  // | Shift| Left | Down | Right| PgDn |  f() |   0  |   1  |   2  |   3  |      |  GUI |
+  // |-----------------------------------------------------------------------------------|
+  // |                           |  --  |  --  |  --  | Ctrl |                           |
+  // '-----------------------------------------------------------------------------------'
 
-    // ...................................................................... Plover
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/27b8f8649393a8ba4071ba946a9306f4
+  [_NUM] = {
+    {_______, _______, _______, _______, _______, _______, KC_PSLS, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______},
+    {KC_LALT, KC_HOME, KC_UP,   KC_END,  KC_PGUP, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_ENT },
+    {KC_LSFT, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, QWERTY,  KC_P0,   KC_P1,   KC_P2,   KC_P3,   _______, KC_LGUI},
+    {_______, _______, _______, _______, _______, _______, _______, KC_LCTL, _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │   1  │   1  │   1  │   1  │   1  │   1  │   1  │   1  │   1  │   1  │   1  │   1  │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │Qwerty│   S  │   T  │   P  │   H  │   *  │   *  │   F  │   P  │   L  │   T  │   D  │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │Qwerty│   S  │   K  │   W  │   R  │   *  │   *  │   R  │   B  │   G  │   S  │   Z  │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │   A  │   O  │   E  │   U  │
-    //                             └──────┴──────┴──────┴──────┘
+// ...................................................................... Plover
+//
+// http://www.keyboard-layout-editor.com/#/gists/27b8f8649393a8ba4071ba946a9306f4
 
-    [_PLOVER] = LAYOUT(
-        KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1   ,
-        QWERTY1, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,
-        QWERTY2, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-                                            KC_C,    KC_V,    KC_N,    KC_M
-    ),
+  // ,-----------------------------------------------------------------------------------.
+  // |   1  |   1  |   1  |   1  |   1  |   1  |   1  |   1  |   1  |   1  |   1  |   1  |
+  // +-------------+------+------+------+------+------+------+------+------+------+------|
+  // |Qwerty|   S  |   T  |   P  |   H  |   *  |   *  |   F  |   P  |   L  |   T  |   D  |
+  // +------|------+------+------+------+------+------+------+------+------+------+------|
+  // |Qwerty|   S  |   K  |   W  |   R  |   *  |   *  |   R  |   B  |   G  |   S  |   Z  |
+  // +------+------+------+------+------+------+------+------+------+------+------+------|
+  // |                           |   A  |   O  |   E  |   U  |                           |
+  // `-----------------------------------------------------------------------------------'
 
-    // ...................................................................... Gemini
-    //
-    // http://www.keyboard-layout-editor.com/#/gists/27b8f8649393a8ba4071ba946a9306f4
+  [_PLOVER] = {
+    {KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1,    KC_1   },
+    {QWERTY1, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC},
+    {QWERTY2, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT},
+    {_______, _______, _______, _______, KC_C,    KC_V,    KC_N,    KC_M,    _______, _______, _______, _______},
+  },
 
-    // ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┐
-    // │   #  │   #  │   #  │   #  │   #  │   #  │   #  │   #  │   #  │   #  │   #  │   #  │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │Qwerty│   S  │   T  │   P  │   H  │   *  │   *  │   F  │   P  │   L  │   T  │   D  │
-    // ├──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
-    // │Qwerty│   S  │   K  │   W  │   R  │   *  │   *  │   R  │   B  │   G  │   S  │   Z  │
-    // └──────┴──────┴──────┴──────┼──────┼──────┼──────┼──────┼──────┴──────┴──────┴──────┘
-    //                             │   A  │   O  │   E  │   U  │
-    //                             └──────┴──────┴──────┴──────┘
+// ...................................................................... TxBolt
+//
+// http://www.keyboard-layout-editor.com/#/gists/27b8f8649393a8ba4071ba946a9306f4
 
-    [_GEMINI] = LAYOUT(
-        STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,  STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC ,
-        QWERTY1, STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1, STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR ,
-        QWERTY2, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR ,
-                                            STN_A,   STN_O,   STN_E,   STN_U
-    ),
+  // ,-----------------------------------------------------------------------------------.
+  // |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |   #  |
+  // |------+------+------+------+------+-------------+------+------+------+------+------|
+  // |Qwerty|   S  |   T  |   P  |   H  |   *  |   *  |   F  |   P  |   L  |   T  |   D  |
+  // |------+------+------+------+------+------|------+------+------+------+------+------|
+  // |Qwerty|   S  |   K  |   W  |   R  |   *  |   *  |   R  |   B  |   G  |   S  |   Z  |
+  // |------+------+------+------+------+------+------+------+------+------+------+------|
+  // |                           |   A  |   O  |   E  |   U  |                           |
+  // `-----------------------------------------------------------------------------------'
+
+  [_TXBOLT] = {
+    {STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  STN_N6,  STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,  STN_NC },
+    {QWERTY1, STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1, STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR },
+    {QWERTY2, STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR },
+    {_______, _______, _______, _______, STN_A,   STN_O,   STN_E,   STN_U,   _______, _______, _______, _______},
+  },
+
 };
-// clang-format on
 
 // ..................................................................... Keymaps
 
-#define QWERTY_1 1
-#define QWERTY_2 2
+void clear_layers(void)
+{
+  uint8_t layer;
+  for (layer = 0; layer < _END_LAYERS; layer++) {
+    layer_off(layer);
+  }
+}
+
+#define QWERTY_1  1
+#define QWERTY_2  2
 #define QWERTY_12 3
 static uint8_t qwerty_n = 0;
 
-void qwerty(void) {
-    qwerty_n = 0;
-    layer_move(0);
-    set_single_persistent_default_layer(_QWERTY);
+void qwerty(void)
+{
+  qwerty_n = 0;
+  clear_layers();
+  set_single_persistent_default_layer(_QWERTY);
 }
 
-void plover(keyrecord_t *record) {
-    if (record->event.pressed) {
-        layer_move(0);
-        layer_on(_PLOVER);
-        if (!eeconfig_is_enabled()) {
-            eeconfig_init();
-        }
-        keymap_config.raw  = eeconfig_read_keymap();
-        keymap_config.nkro = 1;
-        eeconfig_update_keymap(keymap_config.raw);
+void plover(keyrecord_t *record)
+{
+  if (record->event.pressed) {
+    clear_layers();
+    layer_on(_PLOVER);
+    if (!eeconfig_is_enabled()) {
+      eeconfig_init();
     }
+    keymap_config.raw  = eeconfig_read_keymap();
+    keymap_config.nkro = 1;
+    eeconfig_update_keymap(keymap_config.raw);
+  }
 }
 
-void gemini(void) {
-    layer_move(0);
-    layer_on(_GEMINI);
+void txbolt(void)
+{
+  clear_layers();
+  layer_on(_TXBOLT);
 }
 
 // ........................................................... User Keycode Trap
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case QWERTY:
-            if (record->event.pressed) {
-                qwerty();
-            }
-            return false;
-        case QWERTY1:
-            if (record->event.pressed) {
-                qwerty_n = qwerty_n | QWERTY_1;
-                if (qwerty_n == QWERTY_12) {
-                    qwerty();
-                }
-            } else {
-                qwerty_n = qwerty_n & ~QWERTY_1;
-            }
-            return false;
-        case QWERTY2:
-            if (record->event.pressed) {
-                qwerty_n = qwerty_n | QWERTY_2;
-                if (qwerty_n == QWERTY_12) {
-                    qwerty();
-                }
-            } else {
-                qwerty_n = qwerty_n & ~QWERTY_2;
-            }
-            return false;
-        case BLUE:
-            if (record->event.pressed) {
-                layer_on(_BLUE);
-                update_tri_layer(_BLUE, _ORANGE, _GREEN);
-            } else {
-                layer_off(_BLUE);
-                update_tri_layer(_BLUE, _ORANGE, _GREEN);
-            }
-            return false;
-        case ORANGE:
-            if (record->event.pressed) {
-                layer_on(_ORANGE);
-                update_tri_layer(_BLUE, _ORANGE, _GREEN);
-            } else {
-                layer_off(_ORANGE);
-                update_tri_layer(_BLUE, _ORANGE, _GREEN);
-            }
-            return false;
-        case PLOVER:
-            plover(record);
-            return false;
-        case GEMINI:
-            if (record->event.pressed) {
-                gemini();
-            }
-            return false;
-    }
-    return true;
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
+{
+  switch (keycode) {
+    case QWERTY:
+      if (record->event.pressed) {
+        qwerty();
+      }
+      return false;
+    case QWERTY1:
+      if (record->event.pressed) {
+        qwerty_n = qwerty_n | QWERTY_1;
+        if (qwerty_n == QWERTY_12) {
+          qwerty();
+        }
+      } else {
+        qwerty_n = qwerty_n & ~QWERTY_1;
+      }
+      return false;
+    case QWERTY2:
+      if (record->event.pressed) {
+        qwerty_n = qwerty_n | QWERTY_2;
+        if (qwerty_n == QWERTY_12) {
+          qwerty();
+        }
+      } else {
+        qwerty_n = qwerty_n & ~QWERTY_2;
+      }
+      return false;
+    case BLUE:
+      if (record->event.pressed) {
+        layer_on        (_BLUE);
+        update_tri_layer(_BLUE, _ORANGE, _GREEN);
+      } else {
+        layer_off       (_BLUE);
+        update_tri_layer(_BLUE, _ORANGE, _GREEN);
+      }
+      return false;
+    case ORANGE:
+      if (record->event.pressed) {
+        layer_on        (_ORANGE);
+        update_tri_layer(_BLUE, _ORANGE, _GREEN);
+      } else {
+        layer_off       (_ORANGE);
+        update_tri_layer(_BLUE, _ORANGE, _GREEN);
+      }
+      return false;
+    case PLOVER:
+      plover(record);
+      return false;
+    case TXBOLT:
+      if (record->event.pressed) {
+        txbolt();
+      }
+      return false;
+  }
+  return true;
 }
 
-// Initialize the steno protocol
-void eeconfig_init_user(void) {
-    steno_set_mode(STENO_MODE_BOLT);  // or STENO_MODE_GEMINI
+// initialize steno protocol
+void matrix_init_user(void)
+{
+  steno_set_mode(STENO_MODE_BOLT);
 }
