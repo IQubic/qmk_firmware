@@ -30,6 +30,7 @@ enum keycodes {
 #define CT_ADIA RCTL_T(EU_ADIA)
 
 #define NUM_ENT LT(_NM, KC_ENT)
+#define SYM_0   LT(_SM, KC_0)
 
 #define _____________________QWERTY__L0_____________________   KC_GRV,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
 #define _____________________QWERTY__L1_____________________   KC_TAB,   KC_Q,   KC_W,   KC_E,   KC_R,   KC_T 
@@ -52,12 +53,12 @@ enum keycodes {
 #define _______________________SYM_R3_______________________  KC_PLUS,KC_PERC,KC_DQUO,KC_QUOT,KC_SCLN,_______
 
 #define _______________________NUM_L0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NUM_L1_______________________  KC_LALT,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
-#define _______________________NUM_L2_______________________  KC_LCTL, KC_DEL,KC_HOME,KC_PGUP,KC_PGDN, KC_END
-#define _______________________NUM_L3_______________________  KC_LSFT, KC_ESC, KC_TAB, SW_APP, SW_WIN,_______
+#define _______________________NUM_L1_______________________  KC_LALT,KC_LBRC,   KC_7,   KC_8,   KC_9,KC_RBRC
+#define _______________________NUM_L2_______________________  KC_LCTL,KC_SCLN,   KC_4,   KC_5,   KC_6, KC_EQL
+#define _______________________NUM_L3_______________________  KC_LSFT, KC_GRV,   KC_1,   KC_2,   KC_3,KC_BSLS
 
 #define _______________________NUM_R0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NUM_R1_______________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,KC_RALT
+#define _______________________NUM_R1_______________________  KC_HOME,KC_PGDN,KC_PGUP,KC_END,  KC_DEL,KC_RALT
 #define _______________________NUM_R2_______________________  KC_LEFT,KC_DOWN,  KC_UP,KC_RGHT,KC_COLN,KC_RCTL
 #define _______________________NUM_R3_______________________  KC_HOME,KC_PGDN,KC_TRNS,KC_TRNS,KC_SCLN,KC_RSFT
 
