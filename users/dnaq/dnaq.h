@@ -64,7 +64,7 @@ enum keycodes {
 
 #define _____________________ADJUST__L0_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5
 #define _____________________ADJUST__L1_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5
-#define _____________________ADJUST__L2_____________________  _______,RGB_TOG,RGB_SAI,RGB_HUI,RGB_VAI,RGB_MOD
+#define _____________________ADJUST__L2_____________________   KC_CAPS,RGB_TOG,RGB_SAI,RGB_HUI,RGB_VAI,RGB_MOD
 #define _____________________ADJUST__L3_____________________    RESET,_______,RGB_SAD,RGB_HUD,RGB_VAD,RGB_RMOD
 
 #define _____________________ADJUST__R0_____________________    KC_F6,  KC_F7,  KC_F8,  KC_F9, KC_F10, KC_F12
