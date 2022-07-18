@@ -111,6 +111,29 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 static bool sw_win_active = false;
 static bool sw_app_active = false;
 
+bool process_global_quick_tap(uint16_t keycode, keyrecord_t *record) {
+  static uint16_t global_quick_tap_timer = 0;
+  if (keycode < QK_MOD_TAP || keycode > QK_MOD_TAP_MAX) {
+    global_quick_tap_timer = timer_read();
+    return true;
+  }
+  if (timer_elapsed(global_quick_tap_timer) > TAPPING_TERM) {
+    return true;
+  }
+  if (record->event.pressed) {
+    if (keycode == AL_ODIA) {
+      global_quick_tap_timer = timer_read();
+      tap_code16(RALT(KC_O));
+      return false;
+    }
+    keycode = keycode & 0xFF;
+    global_quick_tap_timer = timer_read();
+    tap_code(keycode);
+    return false;
+  }
+  return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_record_keymap(keycode, record)) {
         return false;
@@ -119,9 +142,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     update_swapper(&sw_win_active, KC_LGUI, KC_TAB, SW_WIN, keycode, record);
     update_swapper(&sw_app_active, KC_LGUI, KC_GRV, SW_APP, keycode, record);
 
+    if (!process_global_quick_tap(keycode, record)) {
+        return false;
+    }
+
     if (!process_leader(keycode, record)) {
         return false;
     }
+
     process_caps_word(keycode, record);
 
     switch (keycode) {
@@ -136,11 +164,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 
             }
             return false;
-        case CT_ADIA:
+        case AL_ODIA:
             if (record->tap.count > 0) {
                 if (record->event.pressed) {
                     // send advanced keycode
-                    tap_code16(RALT(KC_A));
+                    tap_code16(RALT(KC_O));
                 }
                 // do not continue with the default tap action
                 // if the MT was pressed or released, but not held

@@ -11,10 +11,6 @@ enum keycodes {
     CU_CAPS = SAFE_RANGE,
     CU_LEAD,
 
-    // special handling for EU_ADIA, since
-    // we wan't to use it as a mod tap
-    EU_ADIA,
-
     // swapper keys for cmd-tab and cmd-`
     SW_WIN,
     SW_APP,
@@ -23,23 +19,32 @@ enum keycodes {
 };
 
 #define EU_ARNG RALT(KC_W)
-#define EU_ODIA RALT(KC_O)
+#define EU_ADIA RALT(KC_A)
+
+#define AL_A LALT_T(KC_A)
+#define SF_S LSFT_T(KC_S)
+#define CT_D LCTL_T(KC_D)
+#define GU_F LGUI_T(KC_F)
+#define GU_J RGUI_T(KC_J)
+#define CT_K RCTL_T(KC_K)
+#define SF_L RSFT_T(KC_L)
+
+// this keycode needs to be handled in process_record_user
+#define AL_ODIA RALT_T(KC_O)
 
 #define CT_ESC LCTL_T(KC_ESC)
-// this keycode needs to be handled in process_record_user
-#define CT_ADIA RCTL_T(EU_ADIA)
 
 #define NUM_ENT LT(_NM, KC_ENT)
 #define SYM_0   LT(_SM, KC_0)
 
 #define _____________________QWERTY__L0_____________________   KC_GRV,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
 #define _____________________QWERTY__L1_____________________   KC_TAB,   KC_Q,   KC_W,   KC_E,   KC_R,   KC_T 
-#define _____________________QWERTY__L2_____________________   CT_ESC,   KC_A,   KC_S,   KC_D,   KC_F,   KC_G
+#define _____________________QWERTY__L2_____________________   KC_ESC,   AL_A,   SF_S,   CT_D,   GU_F,   KC_G
 #define _____________________QWERTY__L3_____________________  KC_LSFT,   KC_Z,   KC_X,   KC_C,   KC_V,   KC_B
 
 #define _____________________QWERTY__R0_____________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,KC_MINS
 #define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,EU_ARNG
-#define _____________________QWERTY__R2_____________________     KC_H,   KC_J,   KC_K,   KC_L,EU_ODIA,CT_ADIA
+#define _____________________QWERTY__R2_____________________     KC_H,   GU_J,   CT_K,   SF_L,AL_ODIA,EU_ADIA
 #define _____________________QWERTY__R3_____________________     KC_N,   KC_M,KC_COMM, KC_DOT,KC_SCLN,KC_RSFT
 
 #define _______________________SYM_L0_______________________  _______,_______,_______,_______,_______,_______
