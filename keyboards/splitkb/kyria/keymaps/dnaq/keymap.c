@@ -10,8 +10,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_QW] = LAYOUT_wrapped(
      _____________________QWERTY__L1_____________________,                                    _____________________QWERTY__R1_____________________,
      _____________________QWERTY__L2_____________________,                                    _____________________QWERTY__R2_____________________,
-     _____________________QWERTY__L3_____________________,   KC_BSPC, KC_TAB, KC_TAB, KC_SPC, _____________________QWERTY__R3_____________________,
-                                    KC_NO,   KC_NO, MO(_SM), KC_BSPC, KC_LSFT,KC_RSFT,KC_SPC, NUM_ENT, KC_NO, KC_NO
+     _____________________QWERTY__L3_____________________,   KC_BSPC, KC_LSFT,KC_TAB, KC_SPC, _____________________QWERTY__R3_____________________,
+                                    KC_NO, OSM_LSF, MO(_SM), KC_BSPC, KC_LSFT,KC_TAB ,KC_SPC, NUM_ENT, OSM_RSF, KC_NO
   ),
   [_SM] = LAYOUT_wrapped(
      _______________________SYM_L1_______________________,                                   _______________________SYM_R1_______________________,

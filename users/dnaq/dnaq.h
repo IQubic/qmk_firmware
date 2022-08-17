@@ -21,16 +21,16 @@ enum keycodes {
 #define EU_ARNG RALT(KC_W)
 #define EU_ADIA RALT(KC_A)
 
-#define AL_A LALT_T(KC_A)
-#define CT_S LCTL_T(KC_S)
-#define SF_D LSFT_T(KC_D)
-#define GU_F LGUI_T(KC_F)
-#define GU_J RGUI_T(KC_J)
-#define SF_K RSFT_T(KC_K)
-#define CT_L RCTL_T(KC_L)
+#define CT_A LCTL_T(KC_A)
+#define AL_S LALT_T(KC_S)
+#define GU_D LGUI_T(KC_D)
+#define SF_F LSFT_T(KC_F)
+#define SF_J RSFT_T(KC_J)
+#define GU_K RGUI_T(KC_K)
+#define AL_L RALT_T(KC_L)
 
 // this keycode needs to be handled in process_record_user
-#define AL_ODIA RALT_T(KC_O)
+#define CT_ODIA RCTL_T(KC_O)
 
 #define CT_ESC LCTL_T(KC_ESC)
 
@@ -39,12 +39,12 @@ enum keycodes {
 
 #define _____________________QWERTY__L0_____________________   KC_GRV,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
 #define _____________________QWERTY__L1_____________________   KC_TAB,   KC_Q,   KC_W,   KC_E,   KC_R,   KC_T 
-#define _____________________QWERTY__L2_____________________   KC_ESC,   AL_A,   CT_S,   SF_D,   GU_F,   KC_G
+#define _____________________QWERTY__L2_____________________   KC_ESC,   CT_A,   AL_S,   GU_D,   SF_F,   KC_G
 #define _____________________QWERTY__L3_____________________  KC_LSFT,   KC_Z,   KC_X,   KC_C,   KC_V,   KC_B
 
 #define _____________________QWERTY__R0_____________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,KC_MINS
 #define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,EU_ARNG
-#define _____________________QWERTY__R2_____________________     KC_H,   GU_J,   SF_K,   CT_L,AL_ODIA,EU_ADIA
+#define _____________________QWERTY__R2_____________________     KC_H,   SF_J,   GU_K,   AL_L,CT_ODIA,EU_ADIA
 #define _____________________QWERTY__R3_____________________     KC_N,   KC_M,KC_COMM, KC_DOT,KC_SCLN,KC_RSFT
 
 #define _______________________SYM_L0_______________________  _______,_______,_______,_______,_______,_______
