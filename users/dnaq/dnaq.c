@@ -121,7 +121,7 @@ bool process_global_quick_tap(uint16_t keycode, keyrecord_t *record) {
     return true;
   }
   if (record->event.pressed) {
-    if (keycode == CT_ODIA) {
+    if (keycode == GU_ODIA) {
       global_quick_tap_timer = timer_read();
       tap_code16(RALT(KC_O));
       return false;
@@ -164,7 +164,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 
             }
             return false;
-        case CT_ODIA:
+        case GU_ODIA:
             if (record->tap.count > 0) {
                 if (record->event.pressed) {
                     // send advanced keycode
