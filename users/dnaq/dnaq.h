@@ -2,9 +2,8 @@
 
 enum layers {
     _QW,
-    _SM,
-    _NM,
-    _NV,
+    _LW,
+    _RS,
     _AD,
 };
 
@@ -29,21 +28,9 @@ enum keycodes {
 #define SF_J RSFT_T(KC_J)
 #define CT_K RCTL_T(KC_K)
 #define AL_L LALT_T(KC_L)
+#define GU_SCLN RGUI_T(KC_SCLN)
 
-// this keycode needs to be handled in process_record_user
-#define GU_ODIA RGUI_T(KC_O)
-
-#define CT_ESC LCTL_T(KC_ESC)
-
-#define NAV_ENT LT(_NV, KC_ENT)
-#define SYM_ESC LT(_SM, KC_ESC)
-#define SYM_0   LT(_SM, KC_0)
-#define NUM_BSP LT(_NM, KC_BSPC)
-#define UNDO LCMD(KC_Z)
-#define CUT LCMD(KC_X)
-#define COPY LCMD(KC_C)
-#define PASTE LCMD(KC_V)
-#define REDO SCMD(KC_Z)
+#define LWR_ENT LT(_LW, KC_ENT)
 
 #define _____________________QWERTY__L0_____________________   KC_GRV,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
 #define _____________________QWERTY__L1_____________________   KC_TAB,   KC_Q,   KC_W,   KC_E,   KC_R,   KC_T 
@@ -51,39 +38,29 @@ enum keycodes {
 #define _____________________QWERTY__L3_____________________  KC_LSFT,   KC_Z,   KC_X,   KC_C,   KC_V,   KC_B
 
 #define _____________________QWERTY__R0_____________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,KC_MINS
-#define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,EU_ARNG
-#define _____________________QWERTY__R2_____________________     KC_H,   SF_J,   CT_K,   AL_L,GU_ODIA,EU_ADIA
+#define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,KC_BSPC
+#define _____________________QWERTY__R2_____________________     KC_H,   SF_J,   CT_K,   AL_L,GU_SCLN,KC_QUOT
 #define _____________________QWERTY__R3_____________________     KC_N,   KC_M,KC_COMM, KC_DOT,KC_SLSH,KC_RSFT
 
-#define _______________________SYM_L0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________SYM_L1_______________________  _______,  KC_NO,KC_UNDS,KC_LBRC,KC_RBRC,KC_CIRC
-#define _______________________SYM_L2_______________________  _______,KC_BSLS,KC_SLSH,KC_LCBR,KC_RCBR,KC_ASTR
-#define _______________________SYM_L3_______________________  _______,KC_HASH, KC_DLR,KC_PIPE,KC_TILD, KC_GRV
+#define ______________________LOWER_L0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________LOWER_L1______________________  _______,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
+#define ______________________LOWER_L2______________________    KC_NO,KC_LGUI,KC_LALT,KC_LCTL,KC_LSFT,  KC_NO
+#define ______________________LOWER_L3______________________  _______,_______,_______,_______,_______,_______
 
-#define _______________________SYM_R0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________SYM_R1_______________________  KC_EXLM,KC_LABK,KC_RABK, KC_EQL,KC_AMPR,_______
-#define _______________________SYM_R2_______________________  KC_QUES,KC_LPRN,KC_RPRN,KC_MINS,KC_COLN,  KC_AT
-#define _______________________SYM_R3_______________________  KC_PLUS,KC_PERC,KC_DQUO,KC_QUOT,KC_SCLN,_______
+#define ______________________LOWER_R0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________LOWER_R1______________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,_______
+#define ______________________LOWER_R2______________________  KC_LEFT,KC_DOWN,  KC_UP,KC_RGHT,_______,_______
+#define ______________________LOWER_R3______________________  _______,_______,_______,_______,_______,_______
 
-#define _______________________NUM_L0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NUM_L1_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NUM_L2_______________________  _______,KC_LGUI,KC_LALT,KC_LCTL,KC_LSFT,_______
-#define _______________________NUM_L3_______________________  _______,_______,_______,_______,_______,_______
+#define ______________________RAISE_L0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________RAISE_L1______________________   KC_TAB,KC_EXLM,  KC_AT,KC_HASH, KC_DLR,KC_PERC
+#define ______________________RAISE_L2______________________  _______,KC_LGUI,KC_LALT,KC_LCTL,KC_LSFT,  KC_NO
+#define ______________________RAISE_L3______________________  _______,_______,_______,_______,_______,_______
 
-#define _______________________NUM_R0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NUM_R1_______________________  _______,   KC_7,   KC_8,   KC_9,_______,_______
-#define _______________________NUM_R2_______________________  _______,   KC_4,   KC_5,   KC_6,KC_COLN,_______
-#define _______________________NUM_R3_______________________  _______,   KC_1,   KC_2,   KC_3,KC_SCLN,_______
-
-#define _______________________NAV_L0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NAV_L1_______________________  _______,KC_PGUP,KC_HOME,  KC_UP, KC_END, KC_INS
-#define _______________________NAV_L2_______________________  _______,KC_PGDN,KC_LEFT,KC_DOWN,KC_RGHT,KC_CAPS
-#define _______________________NAV_L3_______________________  _______,   UNDO,    CUT,   COPY,  PASTE,   REDO
-
-#define _______________________NAV_R0_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NAV_R1_______________________  _______,_______,_______,_______,_______,_______
-#define _______________________NAV_R2_______________________  _______,KC_RSFT,KC_RCTL,KC_LALT,KC_RGUI,_______
-#define _______________________NAV_R3_______________________  _______,_______,_______,_______,_______,_______
+#define ______________________RAISE_R0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________RAISE_R1______________________  KC_CIRC,KC_AMPR,KC_ASTR,KC_LPRN,KC_RPRN,KC_BSPC
+#define ______________________RAISE_R2______________________  KC_MINS, KC_EQL,KC_LBRC,KC_RBRC,KC_BSLS, KC_GRV
+#define ______________________RAISE_R3______________________  KC_UNDS,KC_PLUS,KC_LCBR,KC_RCBR,KC_PIPE,KC_TILD
 
 #define _____________________ADJUST__L0_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5
 #define _____________________ADJUST__L1_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5

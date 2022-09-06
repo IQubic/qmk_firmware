@@ -121,11 +121,6 @@ bool process_global_quick_tap(uint16_t keycode, keyrecord_t *record) {
     return true;
   }
   if (record->event.pressed) {
-    if (keycode == GU_ODIA) {
-      global_quick_tap_timer = timer_read();
-      tap_code16(RALT(KC_O));
-      return false;
-    }
     keycode = keycode & 0xFF;
     global_quick_tap_timer = timer_read();
     tap_code(keycode);
@@ -164,16 +159,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 
             }
             return false;
-        case GU_ODIA:
-            if (record->tap.count > 0) {
-                if (record->event.pressed) {
-                    // send advanced keycode
-                    tap_code16(RALT(KC_O));
-                }
-                // do not continue with the default tap action
-                // if the MT was pressed or released, but not held
-                return false;
-            }
         default:
             return true;
     }
@@ -190,5 +175,5 @@ layer_state_t layer_state_set_keymap(layer_state_t state) {
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     state = layer_state_set_keymap(state);
-    return update_tri_layer_state(state, _SM, _NM, _AD);
+    return update_tri_layer_state(state, _LW, _RS, _AD);
 }
