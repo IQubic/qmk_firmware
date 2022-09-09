@@ -2,6 +2,7 @@
 
 enum layers {
     _QW,
+    _ND,
     _LW,
     _RS,
     _AD,
@@ -20,6 +21,7 @@ enum keycodes {
 
 #define EU_ARNG RALT(KC_W)
 #define EU_ADIA RALT(KC_A)
+#define EU_ODIA RALT(KC_O)
 
 #define GU_A LGUI_T(KC_A)
 #define AL_S LALT_T(KC_S)
@@ -30,6 +32,9 @@ enum keycodes {
 #define AL_L LALT_T(KC_L)
 #define GU_SCLN RGUI_T(KC_SCLN)
 
+// this keycode needs to be handled in process_record_user
+#define GU_ODIA RGUI_T(KC_O)
+
 #define LWR_ENT LT(_LW, KC_ENT)
 
 #define _____________________QWERTY__L0_____________________   KC_GRV,   KC_1,   KC_2,   KC_3,   KC_4,   KC_5
@@ -38,7 +43,7 @@ enum keycodes {
 #define _____________________QWERTY__L3_____________________  KC_LSFT,   KC_Z,   KC_X,   KC_C,   KC_V,   KC_B
 
 #define _____________________QWERTY__R0_____________________     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,KC_MINS
-#define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,KC_BSPC
+#define _____________________QWERTY__R1_____________________     KC_Y,   KC_U,   KC_I,   KC_O,   KC_P,KC_LBRC
 #define _____________________QWERTY__R2_____________________     KC_H,   SF_J,   CT_K,   AL_L,GU_SCLN,KC_QUOT
 #define _____________________QWERTY__R3_____________________     KC_N,   KC_M,KC_COMM, KC_DOT,KC_SLSH,KC_RSFT
 
@@ -53,14 +58,24 @@ enum keycodes {
 #define ______________________LOWER_R3______________________  _______,_______,_______,_______,_______,_______
 
 #define ______________________RAISE_L0______________________  _______,_______,_______,_______,_______,_______
-#define ______________________RAISE_L1______________________   KC_TAB,KC_EXLM,  KC_AT,KC_HASH, KC_DLR,KC_PERC
-#define ______________________RAISE_L2______________________  _______,KC_LGUI,KC_LALT,KC_LCTL,KC_LSFT,  KC_NO
-#define ______________________RAISE_L3______________________  _______,_______,_______,_______,_______,_______
+#define ______________________RAISE_L1______________________   KC_TAB,  KC_NO,KC_UNDS,KC_LBRC,KC_RBRC,KC_CIRC
+#define ______________________RAISE_L2______________________  _______,KC_BSLS,KC_SLSH,KC_LCBR,KC_RCBR,KC_ASTR
+#define ______________________RAISE_L3______________________  _______,KC_HASH, KC_DLR,KC_PIPE,KC_TILD, KC_GRV
 
 #define ______________________RAISE_R0______________________  _______,_______,_______,_______,_______,_______
-#define ______________________RAISE_R1______________________  KC_CIRC,KC_AMPR,KC_ASTR,KC_LPRN,KC_RPRN,KC_BSPC
-#define ______________________RAISE_R2______________________  KC_MINS, KC_EQL,KC_LBRC,KC_RBRC,KC_BSLS, KC_GRV
-#define ______________________RAISE_R3______________________  KC_UNDS,KC_PLUS,KC_LCBR,KC_RCBR,KC_PIPE,KC_TILD
+#define ______________________RAISE_R1______________________  KC_EXLM,KC_LABK,KC_RABK, KC_EQL,KC_AMPR,KC_BSPC
+#define ______________________RAISE_R2______________________  KC_QUES,KC_LPRN,KC_RPRN,KC_MINS,KC_COLN,KC_AT
+#define ______________________RAISE_R3______________________  KC_PLUS,KC_PERC,KC_DQUO,KC_QUOT,KC_SCLN,KC_NO
+
+#define ______________________NORDE_L0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________NORDE_L1______________________  _______,_______,_______,_______,_______,_______
+#define ______________________NORDE_L2______________________  _______,_______,_______,_______,_______,_______
+#define ______________________NORDE_L3______________________  _______,_______,_______,_______,_______,_______
+
+#define ______________________NORDE_R0______________________  _______,_______,_______,_______,_______,_______
+#define ______________________NORDE_R1______________________  _______,_______,_______,_______,_______,EU_ARNG
+#define ______________________NORDE_R2______________________  _______,_______,_______,_______,GU_ODIA,EU_ADIA
+#define ______________________NORDE_R3______________________  _______,_______,_______,_______,_______,_______
 
 #define _____________________ADJUST__L0_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5
 #define _____________________ADJUST__L1_____________________   KC_F11,  KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5

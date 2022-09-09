@@ -121,6 +121,11 @@ bool process_global_quick_tap(uint16_t keycode, keyrecord_t *record) {
     return true;
   }
   if (record->event.pressed) {
+    if (keycode == GU_ODIA) {
+      global_quick_tap_timer = timer_read();
+      tap_code16(EU_ODIA);
+      return false;
+    }
     keycode = keycode & 0xFF;
     global_quick_tap_timer = timer_read();
     tap_code(keycode);
@@ -159,6 +164,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 
             }
             return false;
+        case GU_ODIA:
+            if (record->tap.count > 0) {
+                if (record->event.pressed) {
+                    // send advanced keycode
+                    tap_code16(EU_ODIA);
+                }
+                // do not continue with the default tap action
+                // if the MT was pressed or released, but not held
+                return false;
+            }
         default:
             return true;
     }
